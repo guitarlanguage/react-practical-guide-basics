@@ -3,7 +3,8 @@ import { useState } from 'react';
 
 export default function App() {
 
-  const [ enteredGoalText, setEnteredGoalText ] = useState('');
+  const [enteredGoalText, setEnteredGoalText] = useState('');
+  const [courseGoals, setCourseGoals] = useState([]);
 
   function goalInputHandler (enteredText) {
     // this function will get the text automatically thanks to react's `onChangeText`
@@ -11,11 +12,12 @@ export default function App() {
     setEnteredGoalText(enteredText);
   };
     
-  function addGoalHandler () {
-    // connect this function to the button press
-    //and we want the value from the goalInputHandler
-    console.log(enteredGoalText);
-  };
+  function addGoalHandler() {
+    setCourseGoals((currentCourseGoals) => [
+      ...currentCourseGoals,
+      enteredGoalText,
+    ]);
+  }
   // const handleText [handleText, setHandleText ] = useState('')
   return (
     <View style={styles.appContainer}>
@@ -25,7 +27,7 @@ export default function App() {
         <Button onPress={addGoalHandler} title="Add Goal" />
       </View>
       <View style={styles.goalsContainer}>
-        <Text>List of goals...</Text>
+        {courseGoals.map((goal) => <Text key={goal}>{goal}</Text>)}
       </View>
     </View>
   );
