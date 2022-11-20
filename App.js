@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Button, TextInput } from 'react-native';
+import { StyleSheet, Text, View, Button, TextInput, ScrollView, FlatList } from 'react-native';
 import { useState } from 'react';
 
 export default function App() {
@@ -15,7 +15,8 @@ export default function App() {
   function addGoalHandler() {
     setCourseGoals((currentCourseGoals) => [
       ...currentCourseGoals,
-      enteredGoalText,
+      // we turned enteredGoalText into an object with the text being enteredGoalText and a key that is a randomly generated number to string
+      {text: enteredGoalText, id: Math.random().toString()},
     ]);
   }
   // const handleText [handleText, setHandleText ] = useState('')
@@ -27,13 +28,28 @@ export default function App() {
         <Button onPress={addGoalHandler} title="Add Goal" />
       </View>
       <View style={styles.goalsContainer}>
-        {courseGoals.map((goal) => (
-          <View key={goal} style={styles.goalItem}>
-            <Text style={styles.goalText}>{goal}</Text>
-          </View>
-        ))}
+        {/* FlatList takes two properties: data and renderItem */}
+        <FlatList 
+          data={courseGoals}
+          renderItem = {(itemData) => {
+            return (
+              <View style={styles.goalItem}>
+                <Text style={styles.goalText}>{itemData.item.text}</Text>
+              </View>
+            );
+          }}
         
+          // FlatList has this keyExtractor property. it takes two props item and index
+          keyExtractor={(item, index) => {
+            return item.id
+          }}
+          alwaysBounceVertical={false}
+        />
+          
+     
+
       </View>
+      
     </View>
   );
 }
